@@ -86,11 +86,9 @@ Node* llfilter(Node* head, Comp pred)
   if(!head){
     return nullptr; //Base: empty
   }
-
+	Node* nextNode = head->next;
   if(pred(head->val)){
-    Node* nextNode = head->next;
     delete head; //deallocate current node
-
     return llfilter(nextNode, pred);//recursively filter
   } else{
     head->next = llfilter(head->next, pred);//keep current node
