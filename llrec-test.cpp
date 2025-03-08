@@ -88,14 +88,14 @@ int main(int argc, char* argv[])
     // Test out your linked list code
     Node* smaller = nullptr;
     Node* larger = nullptr;
-    int pivotVal = 5;
+    int pivotVal = 10;
 
     llpivot(head, smaller, larger, pivotVal);
 
     cout<< "pivot: "<< pivotVal<<endl;
-    cout<< "smaller: "<<;
+    cout<< "smaller: "<< endl;
     print(smaller);
-    count<< " larger: "<<endl;
+    cout<< " larger: "<<endl;
     print(larger);
 
     dealloc(smaller);

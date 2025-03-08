@@ -2,6 +2,7 @@
 #define HEAP_H
 #include <functional>
 #include <stdexcept>
+#include <vector>
 
 template <typename T, typename PComparator = std::less<T> >
 class Heap
@@ -61,14 +62,43 @@ public:
 
 private:
   /// Add whatever helper functions and data members you need below
-
-
-
+	std::vector<T> data; //storing heap
+	int chld;//children/node
+	PComparator Cmp; //comparator
+	void heapifyTop(size_t index); //used to insert
+	void heapifyDown(size_t index); //usaed to remove
 
 };
 
 // Add implementation of member functions here
 
+//Constructor
+template <typename T, typename PComparator>
+Heap<T, PComparator>::Heap(int ch, PComparator Cp) : chld(ch), Cmp(Cp){}
+
+//deconstructor
+
+template<typename T, typename PComparator>
+Heap<T, PComparator>::~Heap(){
+
+}
+//size
+template<typename T, typename PComparator>
+size_t Heap<T, PComparator>::size() const{
+		return data.size();
+}
+
+//emput
+template<typename T, typename PComparator>
+bool Heap<T, PComparator>::empty() const{
+		return data.empty();
+}
+//push
+template<typename T, typename PComparator>
+void Heap<T, PComparator>::push(const T& item) {
+		data.push_back(item);
+		heapifyTop(data.size()-1); //restore property/structure 
+}
 
 // We will start top() for you to handle the case of 
 // calling top on an empty heap
@@ -81,13 +111,14 @@ T const & Heap<T,PComparator>::top() const
     // ================================
     // throw the appropriate exception
     // ================================
+		throw std::underflow_error("Heap is empty, cannot get top");
 
 
   }
   // If we get here we know the heap has at least 1 item
   // Add code to return the top element
 
-
+	return data[0];
 
 }
 
@@ -101,12 +132,45 @@ void Heap<T,PComparator>::pop()
     // ================================
     // throw the appropriate exception
     // ================================
-
-
+		throw std::underflow_error("Heap is empty, cannot pop.");
+		}
+	data[0] =data.back(); //replacement of root
+		data.pop_back(); //last element gone
+		if(!empty()){
+			heapifyDown(0); //restore property/structure
   }
 
+}
 
 
+//heapifyTop
+template<typename T, typename PComparator>
+void Heap<T, PComparator>::heapifyTop(size_t index) {
+		if(index == 0) return; //at root
+		size_t ParentNode = (index-1)/ chld;
+		if(Cmp(data[index], data[ParentNode])){ //comparing them
+			std::swap(data[index], data[ParentNode]); //swap
+			heapifyTop(ParentNode);//recursively compare to rstore structure
+		}
+}
+
+//heapifyDown
+template<typename T, typename PComparator>
+void Heap<T, PComparator>::heapifyDown(size_t index) {
+	size_t BestIdx = index;
+	size_t leftchild = index * chld+1;
+
+	for(size_t i =0; i< static_cast<size_t>(chld); i++){
+		size_t Truechild = leftchild +i;
+		if(Truechild < data.size() && Cmp(data[Truechild], data[BestIdx])){
+			BestIdx = Truechild;
+		}
+	}
+		
+		if(BestIdx != index){ //comparing them
+			std::swap(data[index], data[BestIdx]); //swap
+			heapifyDown(BestIdx);//recursively compare to rstore structure
+		}
 }
 
 
